@@ -1,5 +1,5 @@
 # Repositorio-API-PRODUCTOS
 Trabajo colaborativo en equipo
-Integrantes:
--Carlos Daniel Gonzales Chilcon 
+Integrantes: \n
+-Carlos Daniel Gonzales Chilcon \n
 -Jose Rosas Cordova
