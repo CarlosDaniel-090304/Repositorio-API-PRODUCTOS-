@@ -93,6 +93,30 @@ app.put('/products/:id', (req, res) => {
     res.status(200).json(updatedProduct); // 200 OK
 });
 
+app.patch('/products/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    console.log(`Solicitud PATCH a /products/${id} recibida con body:`, req.body);
+
+    const { price, description } = req.body;
+    const productIndex = products.findIndex(p => p.id === id);
+
+    if (productIndex === -1) {
+        return res.status(404).json({ message: 'Producto no encontrado para actualizar' });
+    }
+
+    // Actualiza solo los campos proporcionados
+    const updatedProduct = {
+        ...products[productIndex],
+        price: price !== undefined ? parseFloat(price) : products[productIndex].price,
+        description: description !== undefined ? description : products[productIndex].description
+    };
+
+    products[productIndex] = updatedProduct;
+
+    // Devuelve el producto actualizado
+    res.status(200).json(updatedProduct);
+});
+
 // DELETE /products/:id - Eliminar un producto
 app.delete('/products/:id', (req, res) => {
     const id = parseInt(req.params.id);
