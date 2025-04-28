@@ -18,7 +18,9 @@ app.use(express.json());
 let products = [
     { "id": 1, "name": "Laptop Gamer", "price": 1500, "description": "Potente laptop para juegos" },
     { "id": 2, "name": "Teclado Mecánico", "price": 89, "description": "Teclado con switches Cherry MX" },
-    { "id": 3, "name": "Monitor 4K", "price": 350, "description": "Monitor de alta resolución 27 pulgadas" }
+    { "id": 3, "name": "Monitor 4K", "price": 350, "description": "Monitor de alta resolución 27 pulgadas" },
+    { "id": 4, "name": "Mouse Inalambrico", "price": 250, "description": "Mouse inalambrico de alta calidad" },
+    { "id": 5, "name": "Monitor Full HD 4K", "price": 1250, "description": "Monitor Oled 4k Full HD" }
 ];
 let currentId = 4; // Para generar IDs para nuevos productos
 
