@@ -1,5 +1,3 @@
-// server.js
-
 // 1. Carga variables de entorno desde .env
 require('dotenv').config();
 
