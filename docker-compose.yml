@@ -1,0 +1,52 @@
+version: "3.9" # Especifica la versión de la sintaxis de Docker Compose
+
+services:
+  api:
+    build: . # Construye la imagen para este servicio usando el Dockerfile en el directorio actual
+    container_name: my_api_app # Nombre opcional pero útil para el contenedor
+    ports:
+      - "3000:3000" # Mapea el puerto 3000 del host al puerto 3000 del contenedor
+    environment:
+      # Variables de entorno para que la API sepa cómo conectar a la BD
+      # 'db' es el nombre del servicio de la base de datos y actúa como hostname
+      MONGO_URI: mongodb://db:27017/mydatabase # URL de conexión a MongoDB
+      # Puedes añadir otras variables que tu API necesite aquí
+      # NODE_ENV: development
+    volumes:
+       # Monta el código fuente local dentro del contenedor (útil para desarrollo)
+       # Cambia '.' si tu código no está en el mismo directorio que docker-compose.yml
+       # Cambia '/usr/src/app' si tu Dockerfile copia el código a otra ruta
+      - .:/usr/src/app
+       # Volumen anónimo para node_modules (evita sobrescribir los del host si son incompatibles)
+      - /usr/src/app/node_modules
+    depends_on:
+      - db # Asegura que el servicio 'db' se inicie antes que 'api'
+    networks:
+      - app-network # Conecta este servicio a la red definida abajo
+
+  db:
+    image: mongo:latest # Usa la imagen oficial de MongoDB (última versión)
+    container_name: my_mongo_db # Nombre opcional pero útil para el contenedor
+    ports:
+      - "27017:27017" # Mapea el puerto por defecto de MongoDB
+    volumes:
+      # Monta un volumen nombrado para persistir los datos de MongoDB
+      # Los datos se guardarán en un volumen gestionado por Docker llamado 'mongo-data'
+      - mongo-data:/data/db
+    # Opcional: Variables para inicializar la base de datos (usuario/contraseña)
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: examplepassword
+    #   MONGO_INITDB_DATABASE: mydatabase # Base de datos a crear inicialmente
+    networks:
+      - app-network # Conecta este servicio a la red definida abajo
+    restart: unless-stopped # Reinicia el contenedor si se detiene, a menos que lo detengas manualmente
+
+# Define los volúmenes nombrados
+volumes:
+  mongo-data: # El nombre del volumen usado por el servicio 'db'
+
+# Define las redes personalizadas (buena práctica para aislar contenedores)
+networks:
+  app-network:
+    driver: bridge # Usa el driver de red por defecto (bridge)
